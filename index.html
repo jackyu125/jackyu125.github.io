@@ -1,53 +1,183 @@
-<html>
-<head>
-<title>
-</title>
-</head>
-<body　bgcolor="#5a5a5a"　text="#000000"　link="#0066cc"　vlink="#336600">
-This string.
-<hr size="5" align="center" noshade width="90%" color="0000ff">
-<ul type=circle>
-<li>物件清單1
-<li>物件清單2
-<li>物件清單3
-</ul>
-<ol type=A>
-<li>清單1
-<li>清單2
-<li>清單3
-</ol>
-<dl>
-<dt>耗子
-<dd>是這裡的站長
-<dt>電腦
-<dd>已成為人類生活的一部分
-</dl>
-<h1><b><i>標題文字1</i></b></h1>
-<h2><u>標題文字2</u></h2>
-<h3>標題文字3</h3>
-<h4>標題文字4</h4>
-<h5>標題文字5</h5>
-<h6>標題文字6</h6>
-<font　face="Arial"　color="#cc33ff"　size="7">Good morning</font>
-　　斷行1<br>
-　　斷行2<p>
-<p align=center> Align Center.</p>
-P-Test-1.<br>
-<p align=right>Align Right.</p>
-P-Test-2.<br>
-<pre>
-格式會跟你打的一樣唷
- 看到了嗎
- 會一模一樣唷！！
-</pre>
-<a href="http://www.kimo.com">連到奇摩站</a><p>
-<table border=1>
- <td>儲存格1</td>
- <td>儲存格2</td>
-<tr>
- <td>儲存格3</td>
- <td>儲存格4</td>
- </table><p>
-<marquee>跑馬燈</marquee> 
-</body>
-</html>
+<script LANGUAGE="JavaScript">
+
+ <!-- Begin
+
+ var timerID = null;
+ var patno = 1;
+ var cr = "\r\n";
+ var spcf1 = "";
+ var spcf2 = "";
+ var spcf3 = "";
+ var hitflag = 0;
+ var score = 0;
+ var selec = 0;
+ var rsmiss = "";
+ function array1(arn) {
+ this.length = arn;
+ for (var ar1 = 1; ar1 <= arn; ar1++) {
+ this[ar1] = 1; }
+ return this;
+ }
+ function init() {
+ blankx = new array1(63);
+ for (var makeblank = 0; makeblank < 63; makeblank++) {
+ blankx[makeblank] = "";
+ for (var addBlank = 0; addBlank < makeblank; addBlank++) {
+ blankx[makeblank] = blankx[makeblank] + " ";
+ }
+ }
+ faker = new array1(24);
+ face = new array1(2);
+ face[1] = " (O_O) ";
+ face[2] = " (o_o) ";
+ mestotal = new array1(4);
+ interval1();
+ }
+ function restarter() {
+ inplay = 0;
+ blankno = 0;
+ totalblank = "";
+ lr = 1;
+ lowerlf = "";
+ downlf = "";
+ downno = 0;
+ missilex = 99;
+ missiley = 99;
+ mychrx = 1;
+ myblank = "";
+ mymove = 0;
+ selec = 1;
+ starter();
+ }
+ function starter() {
+ document.fmark.win.value=cr+cr+cr+cr+cr+cr+cr+cr+cr+cr
+ +" 按開始遊戲鍵"+cr+cr+cr
+ +" 然後再按發射飛彈鍵開始遊戲";
+ selec = 1;
+ }
+ function goleft() {
+ mymove = 0;
+ mychrx = mychrx - 1;
+ if (mychrx <= 0) { mychrx = 1; }
+ }
+ function goright() {
+ mymove = 0
+ mychrx = mychrx + 1;
+ if (mychrx >= 56) { mychrx = 55; }
+ }
+ function golmax() {
+ if (inplay == 1) { mymove = -1; }
+ }
+ function gormax() {
+ if (inplay == 1){ mymove = 1; }
+ }
+ function fire() {
+ if (inplay == 0){ if (selec == 1){ selec = 9; inplay = 1; init(); }
+ } else {
+ if (missiley == 99){ missiley = 18; missilex = mychrx + 3; }
+ }
+ }
+ function gameover() {
+ score = 0;
+ for (var enerme = 1; enerme < 25; enerme++) {
+ if (faker[enerme] == 1){ score = score + 1; }
+ }
+ if (score == 0) {
+ document.fmark.win.value = cr+cr+cr+cr+cr+cr+cr+cr
+ +" 您好厲害喔!"+cr+cr
+ +" 在來一局好嗎!!";
+ } else {
+ document.fmark.win.value=cr+cr+cr+cr+cr+cr+cr+cr
+ +" 遊戲結束"+cr+cr
+ +" "+score+" 隻沒打下來";
+ }
+ inplay = 0;
+ }
+ function interval1() {
+ if (missiley != 99) { missiley = missiley - 1; }
+ if (missiley < 0){ missiley = 99; }
+ mychrx = mychrx + mymove;
+ if (mychrx <= 0){ mychrx = 1; }
+ if (mychrx >= 56){ mychrx = 55; }
+ blankno = blankno + lr;
+ totalblank = blankx[blankno];
+ if (blankno >= 20) { lr = -1; downno = downno + 1; blankno = 20; }
+ if (blankno <= 0) { lr = 1; downno = downno + 1; blankno = 0; }
+ if (downno >= 12) { gameover(); }
+ downlf = "";
+ for (var upperspc = 0; upperspc < downno; upperspc++) {
+ if (missiley == upperspc) {
+ downlf = downlf + blankx[missilex]+"|"+cr;
+ } else { downlf = downlf+cr; }
+ }
+ if (inplay == 1) {
+ patno = patno + 1;
+ if (patno >= 3) { patno = 1; }
+ for (var addline = 1; addline < 5; addline++){
+ mestotal[addline] = totalblank;
+ rsmiss = "";
+ if (missiley == (downno+addline*2-2)) {
+ if (blankno <= missilex) {
+ hitflag = parseInt((missilex-blankno)/7, 10);
+ if (hitflag < 6) {
+ if ((missilex - blankno - (hitflag * 7)) >= 1) {
+ if ((missilex - blankno - (hitflag * 7)) <= 5) {
+ if (faker[(addline * 6) + hitflag - 5] == 1) {
+ faker[(addline * 6) + hitflag - 5] = 0;
+ missiley = 99;
+ }
+ }
+ }
+ }else {
+ if (missilex > (blankno + 42)) {
+ rsmiss = blankx[missilex - blankno - 42]+"|";
+ }
+ }
+ } else {
+ mestotal[addline] = blankx[missilex]+"|";
+ if (missilex < (blankno-1)) {
+ mestotal[addline] = mestotal[addline]+blankx[blankno-1-missilex];
+ }
+ }
+ }
+ for (var addfaker = 1; addfaker < 7; addfaker++) {
+ if (faker[(addline*6)+addfaker-6] == 1) {
+ mestotal[addline] = mestotal[addline]+face[patno];
+ } else { mestotal[addline] = mestotal[addline]+" "; }
+ }
+ mestotal[addline] = mestotal[addline]+rsmiss;
+ }
+ spcf1 = cr;
+ spcf2 = cr;
+ spcf3 = cr;
+ if (missiley == (downno+1)) { spcf1 = blankx[missilex]+"|"+cr; }
+ if (missiley == (downno+3)) { spcf2 = blankx[missilex]+"|"+cr; }
+ if (missiley == (downno+5)) { spcf3 = blankx[missilex]+"|"+cr; }
+ lowerlf = "";
+ for (var lowerspc = 0; lowerspc < (11-downno); lowerspc++) {
+ if (missiley == (downno+7+lowerspc)) {
+ lowerlf = lowerlf+blankx[missilex]+"|"+cr;
+ } else { lowerlf = lowerlf+cr; }
+ }
+ myblank = blankx[mychrx];
+ document.fmark.win.value = downlf+mestotal[1]+cr+spcf1
+ +mestotal[2]+cr+spcf2+mestotal[3]+cr+spcf3+mestotal[4]
+ +cr+lowerlf+myblank+""+cr+myblank+"(^_^)";
+ timerID = setTimeout("interval1()",250);
+ }
+ }
+ // End -->
+ </script>
+ <body background="jpg/01_bkg1.jpg">
+
+ <center>
+ <form method="post" name="fmark">
+ <table border="1" cellspacing="0" cellpadding="0" bgcolor="#00CCFF">
+ <tr>
+ <td align="center"><textarea name="win" rows="20" cols="63" wrap="virtual"></textarea>
+ <pre><input type="button" name="button" value="向左移動 " onClick="golmax()"> <input type="button" name="button" value="發射發彈" onClick="fire()"> <input type="button" name="button" value=" 向右移動" onClick="gormax()"></pre>
+ <input type="button" name="button" value=" 開始遊戲 " onClick="restarter()"></td>
+ </tr>
+ </table>
+ </form>
+ </center> 
